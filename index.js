@@ -22,6 +22,8 @@ async function main() {
                 'lint-staged',
                 'prettier',
                 'husky',
+                'commitizen',
+                'cz-conventional-changelog',
             ],
             { saveDev: true }
         );

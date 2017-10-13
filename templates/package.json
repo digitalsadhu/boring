@@ -3,7 +3,8 @@
         "lint:format": "eslint --fix .",
         "lint": "eslint .",
         "test": "jest --coverage",
-        "precommit": "lint-staged"
+        "precommit": "lint-staged",
+        "cm": "git-cz"
     },
     "jest": {
         "clearMocks": true,
@@ -21,5 +22,10 @@
             "./node_modules/.bin/eslint --fix --config ./.eslintrc",
             "git add"
         ]
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
     }
 }

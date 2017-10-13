@@ -9,6 +9,8 @@
     "ora": "^1.3.0"
   },
   "devDependencies": {
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
     "eslint": "^4.8.0",
     "eslint-config-finn": "^3.0.0",
     "eslint-config-finn-prettier": "^3.0.1",
@@ -21,7 +23,8 @@
     "lint:format": "eslint --fix .",
     "lint": "eslint .",
     "test": "jest --coverage",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "cm": "git-cz"
   },
   "author": "Richard Walker <digitalsadhu@gmail.com>",
   "license": "MIT",
@@ -41,5 +44,10 @@
       "./node_modules/.bin/eslint --fix --config ./.eslintrc",
       "git add"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
