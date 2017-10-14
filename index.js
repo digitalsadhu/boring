@@ -4,8 +4,10 @@
 const ora = require('ora');
 const {
     mergeJSONFile,
-    createIfNotExists,
     installPackages,
+    mergeTextFile,
+    createOrReplaceFile,
+    mergeYAMLFile,
 } = require('./utils');
 
 async function main() {
@@ -53,37 +55,41 @@ async function main() {
     // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .eslintignore');
     try {
-        await createIfNotExists('.eslintignore');
+        await mergeTextFile('.eslintignore');
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .eslintignore');
+        console.error(err);
     }
 
     // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .editorconfig');
     try {
-        await createIfNotExists('.editorconfig');
+        await createOrReplaceFile('.editorconfig');
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .editorconfig');
+        console.error(err);
     }
 
     // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .gitignore');
     try {
-        await createIfNotExists('.gitignore');
+        await mergeTextFile('.gitignore');
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .gitignore');
+        console.error(err);
     }
 
     // TODO: Merge yml instead of create if not exists
     spinner.start('Creating/updating .travis.yml');
     try {
-        await createIfNotExists('.travis.yml');
+        await mergeYAMLFile('.travis.yml');
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .travis.yml');
+        console.error(err);
     }
 
     console.log('done');

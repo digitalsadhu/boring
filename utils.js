@@ -2,12 +2,14 @@
 
 const fs = require('fs');
 const util = require('util');
-const nodeInstallPackage = require('npm-install-package');
-const install = util.promisify(nodeInstallPackage);
+const npmInstallPackage = require('npm-install-package');
+const install = util.promisify(npmInstallPackage);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 const path = require('path');
+const assign = require('deep-assign');
+const { dump: stringifyYaml, load: parseYaml } = require('js-yaml');
 
 async function fileExists(name) {
     const destinationPath = path.join(process.cwd(), name);
@@ -27,6 +29,10 @@ async function createIfNotExists(name) {
     }
 }
 
+async function createOrReplaceFile(name) {
+    return createFromTemplate(name);
+}
+
 async function mergeJSONFile(name) {
     const sourcePath = path.join(__dirname, 'templates', name);
     const destinationPath = path.join(process.cwd(), name);
@@ -35,12 +41,53 @@ async function mergeJSONFile(name) {
     if (await fileExists(name)) {
         destinationContents = await readFile(destinationPath, 'utf8');
     }
-    const mergedContents = Object.assign(
+    const mergedContents = assign(
         {},
         JSON.parse(destinationContents || '{}'),
         JSON.parse(sourceContents)
     );
     return writeFile(destinationPath, JSON.stringify(mergedContents, null, 2));
+}
+
+async function mergeTextFile(name) {
+    const sourcePath = path.join(__dirname, 'templates', name);
+    const destinationPath = path.join(process.cwd(), name);
+    const sourceContents = await readFile(sourcePath, 'utf8');
+    let destinationContents = '';
+    if (await fileExists(name)) {
+        destinationContents = await readFile(destinationPath, 'utf8');
+    }
+    const resultingLines = new Map();
+    const sourceLines = sourceContents.split('\n');
+    const destinationLines = destinationContents.split('\n');
+    for (const line of destinationLines) {
+        resultingLines.set(line.trim(), line);
+    }
+    for (const line of sourceLines) {
+        resultingLines.set(line.trim(), line);
+    }
+    const resultingFileContents = Array.from(resultingLines.values())
+        .filter(Boolean)
+        .join('\n');
+
+    await writeFile(destinationPath, resultingFileContents);
+}
+
+async function mergeYAMLFile(name) {
+    const sourcePath = path.join(__dirname, 'templates', name);
+    const destinationPath = path.join(process.cwd(), name);
+    const sourceContents = await readFile(sourcePath, 'utf8');
+    let destinationContents = '';
+    if (await fileExists(name)) {
+        destinationContents = await readFile(destinationPath, 'utf8');
+    }
+    const mergedContents = assign(
+        {},
+        parseYaml(destinationContents),
+        parseYaml(sourceContents)
+    );
+    const yaml = stringifyYaml(mergedContents);
+    await writeFile(destinationPath, yaml);
 }
 
 const installPackages = install;
@@ -50,5 +97,8 @@ module.exports = {
     createFromTemplate,
     createIfNotExists,
     mergeJSONFile,
+    mergeTextFile,
+    mergeYAMLFile,
     installPackages,
+    createOrReplaceFile,
 };
