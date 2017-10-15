@@ -4,7 +4,8 @@
         "lint": "eslint .",
         "test": "jest --coverage",
         "precommit": "lint-staged",
-        "cm": "git-cz"
+        "cm": "git-cz",
+        "readme": "projectz compile"
     },
     "jest": {
         "clearMocks": true,
@@ -19,7 +20,11 @@
     },
     "lint-staged": {
         "*.js": [
-            "./node_modules/.bin/eslint --fix --config ./.eslintrc",
+            "eslint --fix --config ./.eslintrc",
+            "git add"
+        ],
+        "{package.json,README.md}": [
+            "projectz compile",
             "git add"
         ]
     },
@@ -27,5 +32,13 @@
         "commitizen": {
             "path": "cz-conventional-changelog"
         }
+    },
+    "badges": {
+		"list": [
+			"travisci",
+			"npmversion",
+			"daviddm",
+            "daviddmdev"
+        ]
     }
 }

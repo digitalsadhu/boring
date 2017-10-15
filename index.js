@@ -8,6 +8,7 @@ const {
     mergeTextFile,
     createOrReplaceFile,
     mergeYAMLFile,
+    mergeReadmeFile,
 } = require('./utils');
 
 async function main() {
@@ -26,6 +27,7 @@ async function main() {
                 'husky',
                 'commitizen',
                 'cz-conventional-changelog',
+                'projectz',
             ],
             { saveDev: true }
         );
@@ -34,7 +36,6 @@ async function main() {
         spinner.fail('Unable to install dependencies');
     }
 
-    // TODO: Improve to use deep merge instead of shallow
     spinner.start('Updating package.json');
     try {
         await mergeJSONFile('package.json');
@@ -43,7 +44,6 @@ async function main() {
         spinner.fail('Unable to update package.json');
     }
 
-    // TODO: Improve to use deep merge instead of shallow
     spinner.start('Creating/updating .eslintrc');
     try {
         await mergeJSONFile('.eslintrc');
@@ -52,7 +52,6 @@ async function main() {
         spinner.fail('Unable to create/update .eslintrc');
     }
 
-    // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .eslintignore');
     try {
         await mergeTextFile('.eslintignore');
@@ -62,7 +61,6 @@ async function main() {
         console.error(err);
     }
 
-    // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .editorconfig');
     try {
         await createOrReplaceFile('.editorconfig');
@@ -72,7 +70,6 @@ async function main() {
         console.error(err);
     }
 
-    // TODO: Text merge instead of create if not exists
     spinner.start('Creating/updating .gitignore');
     try {
         await mergeTextFile('.gitignore');
@@ -82,13 +79,21 @@ async function main() {
         console.error(err);
     }
 
-    // TODO: Merge yml instead of create if not exists
     spinner.start('Creating/updating .travis.yml');
     try {
         await mergeYAMLFile('.travis.yml');
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .travis.yml');
+        console.error(err);
+    }
+
+    spinner.start('Creating/updating README.md');
+    try {
+        await mergeReadmeFile();
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail('Unable to create/update README.md');
         console.error(err);
     }
 

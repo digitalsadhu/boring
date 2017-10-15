@@ -90,6 +90,26 @@ async function mergeYAMLFile(name) {
     await writeFile(destinationPath, yaml);
 }
 
+async function mergeReadmeFile() {
+    const sourcePath = path.join(__dirname, 'templates/README.md');
+    const destinationPath = path.join(process.cwd(), 'README.md');
+    const sourceContents = await readFile(sourcePath, 'utf8');
+    let destinationContents = '';
+    if (await fileExists('README.md')) {
+        destinationContents = await readFile(destinationPath, 'utf8');
+    }
+    const titleRegex = /.+\n=+\n|#.+\n/g;
+    const content = destinationContents
+        .replace(titleRegex, '')
+        .replace(/<!-- TITLE -->/g, '')
+        .replace(/<!-- BADGES -->/g, '')
+        .trim();
+    await writeFile(
+        destinationPath,
+        sourceContents.replace('{{content}}', content)
+    );
+}
+
 const installPackages = install;
 
 module.exports = {
@@ -99,6 +119,7 @@ module.exports = {
     mergeJSONFile,
     mergeTextFile,
     mergeYAMLFile,
+    mergeReadmeFile,
     installPackages,
     createOrReplaceFile,
 };
