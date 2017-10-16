@@ -23,7 +23,7 @@
             "eslint --fix --config ./.eslintrc",
             "git add"
         ],
-        "{package.json,README.md}": [
+        "{package.json,README.md,LICENSE.md}": [
             "projectz compile",
             "git add"
         ]
