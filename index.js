@@ -97,6 +97,15 @@ async function main() {
         console.error(err);
     }
 
+    spinner.start('Creating/updating LICENSE.md');
+    try {
+        await createOrReplaceFile('LICENSE.md');
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail('Unable to create/update LICENSE.md');
+        console.error(err);
+    }
+
     console.log('done');
 }
 
