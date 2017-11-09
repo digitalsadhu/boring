@@ -56,7 +56,7 @@ This can be done like so:
 npm i -g semantic-release-cli
 ```
 
-2. Use it to setup project
+2. Use it to setup project (follow the prompts)
 ```bash
 semantic-release-cli setup
 ```
