@@ -1,45 +1,58 @@
 {
-    "scripts": {
-        "lint:format": "eslint --fix .",
-        "lint": "eslint .",
-        "test": "jest --coverage",
-        "precommit": "lint-staged",
-        "cm": "git-cz",
-        "readme": "projectz compile"
-    },
-    "jest": {
-        "testEnvironment": "node",
-        "clearMocks": true,
-        "coverageThreshold": {
-          "global": {
-            "branches": 100,
-            "functions": 100,
-            "lines": 100,
-            "statements": 100
-          }
-        }
-    },
-    "lint-staged": {
-        "*.js": [
-            "eslint --fix --config ./.eslintrc",
-            "git add"
-        ],
-        "{package.json,README.md,LICENSE.md}": [
-            "projectz compile",
-            "git add"
-        ]
-    },
-    "config": {
-        "commitizen": {
-            "path": "cz-conventional-changelog"
-        }
-    },
-    "badges": {
-		"list": [
-			"travisci",
-			"npmversion",
-			"daviddm",
-            "daviddmdev"
-        ]
+  "scripts": {
+    "lint:format": "eslint --fix .",
+    "lint": "eslint .",
+    "test": "jest --coverage",
+    "precommit": "lint-staged",
+    "cm": "git-cz",
+    "readme": "projectz compile"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "clearMocks": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
     }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "overrides": [
+      {
+        "files": "*.json",
+        "options": {
+          "tabWidth": 2
+        }
+      },
+      {
+        "files": ".eslintrc",
+        "options": {
+          "parser": "json",
+          "tabWidth": 2
+        }
+      }
+    ]
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix --config ./.eslintrc", "git add"],
+    "{package.json,README.md,LICENSE.md}": ["projectz compile", "git add"],
+    "{*.json,*.md,.eslintrc}": [
+      "prettier --write *.md *.json .eslintrc",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "badges": {
+    "list": ["travisci", "npmversion", "daviddm", "daviddmdev"]
+  }
 }
