@@ -45,3 +45,18 @@ npm run readme
 ```bash
 npm run cm
 ```
+
+## Semantic Release
+
+The update will get things in order to using semantic-release but you need to set this up separately.
+This can be done like so:
+
+1. Install semantic release cli
+```bash
+npm i -g semantic-release-cli
+```
+
+2. Use it to setup project
+```bash
+semantic-release-cli setup
+```
