@@ -106,6 +106,24 @@ async function main() {
         console.error(err);
     }
 
+    spinner.start('Creating/updating PULL_REQUEST_TEMPLATE');
+    try {
+        await createOrReplaceFile('PULL_REQUEST_TEMPLATE');
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail('Unable to create/update PULL_REQUEST_TEMPLATE');
+        console.error(err);
+    }
+
+    // spinner.start('Creating/updating .vscode/settings.json');
+    // try {
+    //     await mergeJSONFile('.vscode/settings.json');
+    //     spinner.succeed();
+    // } catch (err) {
+    //     spinner.fail('Unable to create/update .vscode/settings.json');
+    //     console.error(err);
+    // }
+
     console.log('done');
 }
 

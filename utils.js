@@ -98,7 +98,7 @@ async function mergeReadmeFile() {
     if (await fileExists('README.md')) {
         destinationContents = await readFile(destinationPath, 'utf8');
     }
-    const titleRegex = /.+\n=+\n|#.+\n/g;
+    const titleRegex = /.+\n=+\n|^#[^#\n]+$/gm;
     const content = destinationContents
         .replace(titleRegex, '')
         .replace(/<!-- TITLE -->/g, '')

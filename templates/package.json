@@ -8,6 +8,7 @@
         "readme": "projectz compile"
     },
     "jest": {
+        "testEnvironment": "node",
         "clearMocks": true,
         "coverageThreshold": {
           "global": {
