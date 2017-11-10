@@ -43,7 +43,7 @@
     "*.js": ["eslint --fix --config ./.eslintrc", "git add"],
     "{package.json,README.md,LICENSE.md}": ["projectz compile", "git add"],
     "{*.json,*.md,.eslintrc}": [
-      "prettier --write *.md *.json .eslintrc",
+      "prettier --write",
       "git add"
     ]
   },
