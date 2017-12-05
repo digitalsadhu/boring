@@ -5,10 +5,11 @@ const ora = require('ora');
 const {
     mergeJSONFile,
     installPackages,
+    uninstallPackages,
     mergeTextFile,
     createOrReplaceFile,
     mergeYAMLFile,
-    mergeReadmeFile,
+    makeDir,
 } = require('./utils');
 
 async function main() {
@@ -27,13 +28,26 @@ async function main() {
                 'husky',
                 'commitizen',
                 'cz-conventional-changelog',
-                'projectz',
+                'react',
+                'auto-readme',
+                'eslint-plugin-import',
+                '@commitlint/{config-conventional,cli}',
             ],
             { saveDev: true }
         );
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to install dependencies');
+        console.error(err);
+    }
+
+    spinner.start('Uninstalling dependencies');
+    try {
+        await uninstallPackages(['projectz']);
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail('Unable to uninstall dependencies');
+        console.error(err);
     }
 
     spinner.start('Updating package.json');
@@ -42,6 +56,7 @@ async function main() {
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to update package.json');
+        console.error(err);
     }
 
     spinner.start('Creating/updating .eslintrc');
@@ -50,6 +65,7 @@ async function main() {
         spinner.succeed();
     } catch (err) {
         spinner.fail('Unable to create/update .eslintrc');
+        console.error(err);
     }
 
     spinner.start('Creating/updating .eslintignore');
@@ -88,21 +104,15 @@ async function main() {
         console.error(err);
     }
 
-    spinner.start('Creating/updating README.md');
+    spinner.start('Creating README template builder');
     try {
-        await mergeReadmeFile();
+        await makeDir('docs');
+        await createOrReplaceFile('/docs/USAGE.md');
+        await createOrReplaceFile('/docs/CONTRIBUTING.md');
+        await createOrReplaceFile('readme.js');
         spinner.succeed();
     } catch (err) {
-        spinner.fail('Unable to create/update README.md');
-        console.error(err);
-    }
-
-    spinner.start('Creating/updating LICENSE.md');
-    try {
-        await createOrReplaceFile('LICENSE.md');
-        spinner.succeed();
-    } catch (err) {
-        spinner.fail('Unable to create/update LICENSE.md');
+        spinner.fail('Unable to setup README builder');
         console.error(err);
     }
 
@@ -115,16 +125,17 @@ async function main() {
         console.error(err);
     }
 
-    // spinner.start('Creating/updating .vscode/settings.json');
-    // try {
-    //     await mergeJSONFile('.vscode/settings.json');
-    //     spinner.succeed();
-    // } catch (err) {
-    //     spinner.fail('Unable to create/update .vscode/settings.json');
-    //     console.error(err);
-    // }
+    spinner.start('Creating/updating .vscode/settings.json');
+    try {
+        await makeDir('.vscode');
+        await mergeJSONFile('.vscode/settings.json');
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail('Unable to create/update .vscode/settings.json');
+        console.error(err);
+    }
 
-    console.log('done');
+    console.log('✨ 🦄 ✨  Done');
 }
 
 main();

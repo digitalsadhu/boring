@@ -4,7 +4,6 @@
 
 <!-- /TITLE -->
 
-
 Takes all the fun out of repository setup.
 
 ## Install

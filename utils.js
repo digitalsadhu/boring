@@ -3,10 +3,12 @@
 const fs = require('fs');
 const util = require('util');
 const npmInstallPackage = require('npm-install-package');
+const uninstallPackages = require('uninstall-package');
 const install = util.promisify(npmInstallPackage);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
+const mkdir = util.promisify(fs.mkdir);
 const path = require('path');
 const assign = require('deep-assign');
 const { dump: stringifyYaml, load: parseYaml } = require('js-yaml');
@@ -90,27 +92,14 @@ async function mergeYAMLFile(name) {
     await writeFile(destinationPath, yaml);
 }
 
-async function mergeReadmeFile() {
-    const sourcePath = path.join(__dirname, 'templates/README.md');
-    const destinationPath = path.join(process.cwd(), 'README.md');
-    const sourceContents = await readFile(sourcePath, 'utf8');
-    let destinationContents = '';
-    if (await fileExists('README.md')) {
-        destinationContents = await readFile(destinationPath, 'utf8');
-    }
-    const titleRegex = /.+\n=+\n|^#[^#\n]+$/gm;
-    const content = destinationContents
-        .replace(titleRegex, '')
-        .replace(/<!-- TITLE -->/g, '')
-        .replace(/<!-- BADGES -->/g, '')
-        .trim();
-    await writeFile(
-        destinationPath,
-        sourceContents.replace('{{content}}', content)
-    );
-}
-
 const installPackages = install;
+
+async function makeDir(dirName) {
+    const dirPath = path.join(process.cwd(), dirName);
+    if (!await exists(dirPath)) {
+        await mkdir(dirPath);
+    }
+}
 
 module.exports = {
     fileExists,
@@ -119,7 +108,8 @@ module.exports = {
     mergeJSONFile,
     mergeTextFile,
     mergeYAMLFile,
-    mergeReadmeFile,
     installPackages,
+    uninstallPackages,
     createOrReplaceFile,
+    makeDir,
 };

@@ -5,7 +5,7 @@
     "test": "jest --coverage",
     "precommit": "lint-staged",
     "cm": "git-cz",
-    "readme": "projectz compile"
+    "readme": "auto-readme ./readme.js README.md"
   },
   "jest": {
     "testEnvironment": "node",
@@ -41,7 +41,7 @@
   },
   "lint-staged": {
     "*.js": ["eslint --fix --config ./.eslintrc", "git add"],
-    "{package.json,README.md,LICENSE.md}": ["projectz compile", "git add"],
+    "{package.json,*.md}": ["npm run readme", "git add"],
     "{*.json,*.md,.eslintrc}": [
       "prettier --write",
       "git add"
@@ -52,7 +52,7 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "badges": {
-    "list": ["travisci", "npmversion", "daviddm", "daviddmdev"]
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
   }
 }
