@@ -2,6 +2,7 @@
   "scripts": {
     "lint:format": "eslint --fix .",
     "lint": "eslint .",
+    "lint:commit": "commitlint --from=HEAD~1",
     "test": "jest --coverage",
     "precommit": "lint-staged",
     "cm": "git-cz",
