@@ -66,9 +66,6 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "badges": {
-    "list": ["travisci", "npmversion", "daviddm", "daviddmdev"]
-  },
   "maintainers": [],
   "contributors": [],
   "bugs": {
